@@ -7,7 +7,7 @@ trigger:
 - main
 
 pool:
-  name: LocalPool
+  name: Malini
 steps:
 - checkout: self
 - task: Maven@4
