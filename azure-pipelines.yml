@@ -7,16 +7,20 @@ trigger:
 - main
 
 pool:
-  vmImage: ubuntu-latest
-
+  name: LocalPool
 steps:
-- task: Maven@3
+- checkout: self
+- task: Maven@4
   inputs:
-    mavenPomFile: 'pom.xml'
-    mavenOptions: '-Xmx3072m'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.11'
-    jdkArchitectureOption: 'x64'
-    publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'package'
+    mavenPomFile: 'BMI-Calculator/pom.xml'
+    goals: 'clean install'
+    javaHomeOption: 'Path'
+    jdkDirectory: 'C:/Program Files/Java/jdk-24'
+    mavenVersionOption: 'Default'
+
+- task: PublishPipelineArtifact@1
+  displayName: 'Publish build artifact'
+  inputs:
+    targetPath: '$(System.DefaultWorkingDirectory)/BMI-Calculator/target'
+    artifact: 'maven-build'
+    publishLocation: 'pipeline'
