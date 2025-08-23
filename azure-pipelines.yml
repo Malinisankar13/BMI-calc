@@ -8,18 +8,21 @@ trigger:
 - main
 
 pool:
-  vmImage: 'ubuntu-latest'  
+  vmImage: 'ubuntu-latest'
 
 steps:
 - checkout: self
+
+# Run Maven build & tests
 - task: Maven@4
   inputs:
     mavenPomFile: 'BMI-Calculator/pom.xml'
-    goals: 'clean install'
-    javaHomeOption: 'Path'
-    jdkDirectory: 'C:/Program Files/Java/jdk-24'
+    goals: 'package'
     mavenVersionOption: 'Default'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
 
+# Publish build artifacts
 - task: PublishPipelineArtifact@1
   displayName: 'Publish build artifact'
   inputs:
